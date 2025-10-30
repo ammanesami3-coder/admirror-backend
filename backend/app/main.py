@@ -1,3 +1,11 @@
+import sys
+import os
+
+# التأكد من أن Python يتعرف على المسار الكامل داخل Render أو محليًا
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import init_db
@@ -18,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# إنشاء الجداول مرة واحدة فقط عند التشغيل
+# إنشاء الجداول مرة واحدة فقط عند بدء التشغيل
 @app.on_event("startup")
 def on_startup():
     init_db()
