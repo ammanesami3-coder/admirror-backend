@@ -1,15 +1,14 @@
 import sys
 import os
-
-# التأكد من أن Python يتعرف على المسار الكامل داخل Render أو محليًا
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if BASE_DIR not in sys.path:
-    sys.path.append(BASE_DIR)
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import init_db
-from app.routers import users, ads, analysis
+
+# ضبط المسار بشكل متوافق مع Render
+sys.path.append(os.path.dirname(__file__))
+
+# استيراد قاعدة البيانات بعد ضبط المسار
+from database import init_db
+from routers import users, ads, analysis
 
 app = FastAPI(
     title="AdMirror API",
@@ -26,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# إنشاء الجداول مرة واحدة فقط عند بدء التشغيل
+# إنشاء الجداول عند الإقلاع
 @app.on_event("startup")
 def on_startup():
     init_db()
