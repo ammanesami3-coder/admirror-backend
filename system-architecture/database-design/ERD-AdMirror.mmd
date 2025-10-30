@@ -1,0 +1,72 @@
+erDiagram
+    USERS {
+        int id PK
+        string name
+        string email
+        string password_hash
+        string plan_type
+        datetime created_at
+        datetime last_login
+    }
+
+    PROJECTS {
+        int id PK
+        int user_id FK
+        string name
+        string description
+        string category
+        datetime created_at
+    }
+
+    ADS {
+        int id PK
+        int project_id FK
+        string platform
+        string ad_url
+        string caption
+        string media_type
+        string performance_score
+        json metadata
+        datetime created_at
+    }
+
+    ANALYSIS_REPORTS {
+        int id PK
+        int ad_id FK
+        json text_analysis
+        json visual_analysis
+        json audience_profile
+        json strategy_summary
+        float admirror_score
+        datetime created_at
+    }
+
+    GENERATED_ADS {
+        int id PK
+        int user_id FK
+        int based_on_ad_id FK
+        string ad_text
+        string hashtags
+        string design_url
+        string video_url
+        json recommendations
+        datetime created_at
+    }
+
+    PAYMENTS {
+        int id PK
+        int user_id FK
+        float amount
+        string currency
+        string plan
+        string stripe_session_id
+        string payment_status
+        datetime created_at
+    }
+
+    USERS ||--o{ PROJECTS : "creates"
+    PROJECTS ||--o{ ADS : "contains"
+    ADS ||--o{ ANALYSIS_REPORTS : "has"
+    USERS ||--o{ GENERATED_ADS : "creates"
+    ADS ||--o{ GENERATED_ADS : "inspires"
+    USERS ||--o{ PAYMENTS : "makes"
