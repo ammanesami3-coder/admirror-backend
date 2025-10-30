@@ -1,22 +1,22 @@
-import sys
-import os
+# backend/app/main.py
+import os, sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# ضبط المسار بشكل متوافق مع Render
-sys.path.append(os.path.dirname(__file__))
+# نجعل بايثون يرى مجلد backend كـ PYTHONPATH عند التشغيل محليًا أو على Render
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
 
-# استيراد قاعدة البيانات بعد ضبط المسار
-from database import init_db
-from routers import users, ads, analysis
+from app.database import init_db  # الآن متاح
+from app.routers import users, ads, analysis
 
 app = FastAPI(
     title="AdMirror API",
     version="1.0.0",
-    description="API for analyzing and generating Instagram ads using AI"
+    description="API for analyzing and generating Instagram ads using AI",
 )
 
-# تفعيل CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,12 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# إنشاء الجداول عند الإقلاع
 @app.on_event("startup")
 def on_startup():
     init_db()
 
-# تسجيل المسارات
 app.include_router(users.router)
 app.include_router(ads.router)
 app.include_router(analysis.router)
