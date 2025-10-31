@@ -39,29 +39,7 @@ class PaymentStatus(PyEnum):
 
 
 # --------------------
-# Users
-# --------------------
-class User(Base):
-    __tablename__ = "users"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    email = Column(String(255), unique=True, nullable=False, index=True)
-    password_hash = Column(Text, nullable=True)  # nullable if using OAuth/passwordless
-    full_name = Column(String(120), nullable=True)
-    role = Column(Enum(UserRole), nullable=False, default=UserRole.user)
-    plan = Column(Enum(PlanType), nullable=False, default=PlanType.free)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    # relationships
-    ad_requests = relationship("AdRequest", back_populates="user", cascade="all, delete-orphan")
-    generated_ads = relationship("GeneratedAd", back_populates="user", cascade="all, delete-orphan")
-    transactions = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
-    feedbacks = relationship("Feedback", back_populates="user", cascade="all, delete-orphan")
-
-
-# --------------------
-# Plans (optional table if you want plan rows)
+# Plans Table
 # --------------------
 class Plan(Base):
     __tablename__ = "plans"
@@ -72,7 +50,34 @@ class Plan(Base):
     features = Column(JSONB, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    users = relationship("User", primaryjoin="Plan.id==User.plan", viewonly=True)
+    # علاقة صحيحة مع users
+    users = relationship("User", back_populates="plan")
+
+
+# --------------------
+# Users Table
+# --------------------
+class User(Base):
+    __tablename__ = "users"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    password_hash = Column(Text, nullable=True)
+    full_name = Column(String(120), nullable=True)
+    role = Column(Enum(UserRole), nullable=False, default=UserRole.user)
+
+    # ✅ المفتاح الأجنبي الصحيح
+    plan_id = Column(UUID(as_uuid=True), ForeignKey("plans.id"), nullable=True)
+    plan = relationship("Plan", back_populates="users")
+
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # العلاقات الأخرى
+    ad_requests = relationship("AdRequest", back_populates="user", cascade="all, delete-orphan")
+    generated_ads = relationship("GeneratedAd", back_populates="user", cascade="all, delete-orphan")
+    transactions = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
+    feedbacks = relationship("Feedback", back_populates="user", cascade="all, delete-orphan")
 
 
 # --------------------
