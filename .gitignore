@@ -1,0 +1,8 @@
+# Ignore executables and temporary files
+*.exe
+*.pyc
+__pycache__/
+.env
+node_modules
+Texts/admirror-key.openai-api.txt
+.DS_Store
