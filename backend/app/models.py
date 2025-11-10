@@ -92,7 +92,6 @@ class User(Base):
 
     ad_requests = relationship("AdRequest", back_populates="user", cascade="all, delete-orphan")
     generated_ads = relationship("GeneratedAd", back_populates="user", cascade="all, delete-orphan")
-    subscription = relationship("Subscription", back_populates="user", uselist=False)
     transactions = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
     feedbacks = relationship("Feedback", back_populates="user", cascade="all, delete-orphan")
 

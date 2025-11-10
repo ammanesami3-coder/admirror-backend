@@ -39,8 +39,7 @@ def get_db():
 # ------------------------
 def init_db():
     """إنشاء جميع الجداول إذا لم تكن موجودة."""
-    from app import models  # استيراد جميع النماذج لضمان إنشاء كل الجداول
-
+    from backend.app import models
     print("🛠️ Initializing database...")
     Base.metadata.create_all(bind=engine)
     print("✅ All tables created or verified.")

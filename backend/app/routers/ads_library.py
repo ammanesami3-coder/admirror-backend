@@ -10,7 +10,7 @@ from backend.app.models import User
 from backend.app.routers.users import get_current_user
 
 from app.database import get_db
-from app.models import AdLibrary, AdResult, AdRequest, RequestStatus
+from backend.app.models import AdLibrary, AdResult, AdRequest, RequestStatus
 from app.core.ai_service import analyze_ad_text, analyze_ad_image, generate_new_ad
 from backend.app.routers.users import require_role, get_current_user
 from openai import OpenAI
@@ -344,7 +344,7 @@ def analyze_ad(ad_id: UUID, db: Session = Depends(get_db), current_user=Depends(
     تحليل إعلان (نص + صورة) مع حفظ النتائج في AdResult بشكل صحيح.
     """
     from app.core.ai_service import analyze_ad_text, analyze_ad_image
-    from app.models import AdRequest, AdResult, RequestStatus, AdLibrary
+    from backend.app.models import AdRequest, AdResult, RequestStatus, AdLibrary
 
     ad = db.query(AdLibrary).filter(AdLibrary.id == ad_id).first()
     if not ad:
@@ -400,7 +400,7 @@ def get_all_ad_analytics(db: Session = Depends(get_db)):
     إرجاع جميع نتائج التحليل المحفوظة في قاعدة البيانات (ad_results)
     مع تفاصيل الإعلان المرتبط بها.
     """
-    from app.models import AdResult, AdLibrary
+    from backend.app.models import AdResult, AdLibrary
 
     results = (
         db.query(AdResult, AdLibrary)

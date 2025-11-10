@@ -2,8 +2,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models import User
-from app.routers.users import require_role  # لإعادة استخدام حماية المسؤول
+from backend.app.models import User
+from backend.app.routers.users import require_role  # لإعادة استخدام حماية المسؤول
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 

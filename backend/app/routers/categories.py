@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app.database import get_db
-from app.models import Category
+from backend.app.models import Category
 from uuid import UUID
 
 router = APIRouter(prefix="/categories", tags=["Categories"])

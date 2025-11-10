@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 import os
 
 from app.database import get_db
-from app.models import User
+from backend.app.models import User
 
 SECRET_KEY = os.getenv("SECRET_KEY", "super_secret_key_Adm!rr0r_2025")
 ALGORITHM = "HS256"
@@ -67,7 +67,7 @@ from fastapi.security import OAuth2PasswordRequestForm  # ✅
 import os
 
 from app.database import get_db
-from app.models import User
+from backend.app.models import User
 
 SECRET_KEY = os.getenv("SECRET_KEY", "devsecret")
 ALGORITHM = "HS256"
